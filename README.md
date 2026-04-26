@@ -19,6 +19,6 @@ Optimizar el flujo de trabajo para estudiantes de Ingeniería y entusiastas de L
 
 Este repositorio se encuentra en desarrollo activo. Subiré actualizaciones, optimizaciones o nuevos scripts diariamente durante mi plan de especialización de 12 semanas.
 
-    Última actualización: 24 de Marzo, 2026.
+    Última actualización: 26 de Abril, 2026.
 
     Estado actual: Configuración de Módulo 02 (Energía).
