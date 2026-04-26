@@ -32,8 +32,6 @@ sudo sh -c "echo 1 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservat
 sudo sh -c "echo 0 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
 ```
 
-![Demostración de activación del modo conservación](img/01_modo_conservacion.png.jpg)
-
 ---
 
 ## 2. Instalación y Activación de TLP
@@ -66,4 +64,35 @@ Para que el modo conservación se active automáticamente tras cada reinicio, ed
 sudo nano /etc/tlp.conf
 ```
 
-Busca o añade la siguiente línea (valores válidos: `0
+Busca o añade la siguiente línea (valores válidos: `0` = desactivado, `1` = activado):
+```ini
+STOP_CHARGE_THRESH_BAT0=1
+```
+
+> ⚠️ **Importante para Lenovo IdeaPad:** A diferencia de los ThinkPad, aquí NO se usa `START_CHARGE_THRESH_BAT0` ni valores porcentuales como `60`. Tu hardware solo acepta `0` o `1`. Para ver qué parámetros soporta tu equipo, ejecuta: `sudo tlp-stat -b`
+
+Después de editar, reinicia TLP para aplicar los cambios:
+```bash
+sudo systemctl restart tlp
+```
+</details>
+
+---
+
+## 3. Monitoreo con Powertop
+
+Usaremos Powertop exclusivamente para diagnosticar qué procesos o dispositivos consumen más energía en tiempo real.
+
+**Instalación y ejecución:**
+```bash
+sudo apt install powertop
+sudo powertop
+```
+
+> **⚠️ Advertencia:** No utilices la función `--auto-tune` de Powertop si ya tienes TLP activo, ya que ambos servicios podrían pisar sus configuraciones mutuamente. Úsalo solo como herramienta de diagnóstico.
+
+---
+
+## 🤝 Contribuciones
+
+¿Lograste configurar los umbrales de carga en una laptop de otra marca (Dell, HP, Asus) o en un Lenovo ThinkPad? ¡Me encantaría saber cómo lo hiciste! Siéntete libre de abrir un **Issue** o enviar un **Pull Request** para documentarlo aquí y que este recurso sea útil para más estudiantes.
