@@ -23,14 +23,16 @@ Para evitar la degradación de la batería por mantenerla siempre al 100%, activ
 > *Si tu equipo es un ThinkPad u otra marca (Dell, HP, Asus), los parámetros serán diferentes y normalmente sí permiten porcentajes personalizables.*
 
 **Activar el modo conservación (carga máxima ~55-60%):**
-```bash
+\`\`\`bash
 sudo sh -c "echo 1 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
-```
+\`\`\`
 
 **Desactivar el modo (cargar hasta el 100%):**
-```bash
+\`\`\`bash
 sudo sh -c "echo 0 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
-```
+\`\`\`
+
+![Demostración de activación del modo conservación](img/01_modo_conservacion.png.jpg)
 
 ---
 
@@ -39,42 +41,44 @@ sudo sh -c "echo 0 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservat
 TLP aplica reglas automáticas para reducir el consumo del CPU y periféricos (Wi-Fi, Bluetooth, Audio) cuando se detecta el uso de batería.
 
 **Instalación:**
-```bash
+\`\`\`bash
 sudo apt update && sudo apt install tlp tlp-rdw
-```
+\`\`\`
 
 **Activación del servicio:**
-```bash
+\`\`\`bash
 sudo systemctl enable tlp
 sudo systemctl start tlp
-```
+\`\`\`
 > **💡 Tip:** El comando `sudo tlp start` es redundante porque `systemctl start tlp` ya lo ejecuta. Puedes omitirlo.
 
 **Verificar que TLP está activo:**
-```bash
+\`\`\`bash
 sudo tlp-stat -s
-```
+\`\`\`
 
 <details>
 <summary>⚙️ <b>Configurar persistencia del modo conservación en TLP (Haz clic para expandir)</b></summary>
 
 Para que el modo conservación se active automáticamente tras cada reinicio, edita el archivo de configuración:
 
-```bash
+\`\`\`bash
 sudo nano /etc/tlp.conf
-```
+\`\`\`
 
 Busca o añade la siguiente línea (valores válidos: `0` = desactivado, `1` = activado):
-```ini
+\`\`\`ini
 STOP_CHARGE_THRESH_BAT0=1
-```
+\`\`\`
 
 > ⚠️ **Importante para Lenovo IdeaPad:** A diferencia de los ThinkPad, aquí NO se usa `START_CHARGE_THRESH_BAT0` ni valores porcentuales como `60`. Tu hardware solo acepta `0` o `1`. Para ver qué parámetros soporta tu equipo, ejecuta: `sudo tlp-stat -b`
 
+![Estado de la batería mostrando el umbral en TLP](img/02_tlp_estado_bateria.png.jpg)
+
 Después de editar, reinicia TLP para aplicar los cambios:
-```bash
+\`\`\`bash
 sudo systemctl restart tlp
-```
+\`\`\`
 </details>
 
 ---
@@ -84,10 +88,12 @@ sudo systemctl restart tlp
 Usaremos Powertop exclusivamente para diagnosticar qué procesos o dispositivos consumen más energía en tiempo real.
 
 **Instalación y ejecución:**
-```bash
+\`\`\`bash
 sudo apt install powertop
 sudo powertop
-```
+\`\`\`
+
+![Ejemplo de ejecución y monitoreo con Powertop](img/03_powertop_ejemplo.png.jpg)
 
 > **⚠️ Advertencia:** No utilices la función `--auto-tune` de Powertop si ya tienes TLP activo, ya que ambos servicios podrían pisar sus configuraciones mutuamente. Úsalo solo como herramienta de diagnóstico.
 
